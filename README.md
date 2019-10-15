@@ -1,11 +1,11 @@
-#PyNeat
-###Python implementation for NEAT algorithm
+# PyNeat
+### Python implementation for NEAT algorithm
 
-##Technologies used:
+## Technologies used:
 - Python 3.7
 - numpy 1.17.2
 
-##Code structure:
+## Code structure:
 - Genome: contains the structure which represents a Genome, the same has a map of connection genes and Node genes.
 - NodeGene: a gene structure representing a graph node with has an innovation number.
 - ConnectionGene: a gene structure representing a connection between two nodes, it has an innovation number and a weight.
