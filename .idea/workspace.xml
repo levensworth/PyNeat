@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="972fbb82-cbc1-4dd3-8542-aee4a60ce5c6" name="Default Changelist" comment="" />
+    <list default="true" id="972fbb82-cbc1-4dd3-8542-aee4a60ce5c6" name="Default Changelist" comment="add idea to ignore files">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,8 +122,16 @@
       <workItem from="1570550751128" duration="15986000" />
       <workItem from="1570629863499" duration="3691000" />
       <workItem from="1570653465983" duration="1840000" />
-      <workItem from="1571072281007" duration="3147000" />
+      <workItem from="1571072281007" duration="3447000" />
     </task>
+    <task id="LOCAL-00001" summary="add idea to ignore files">
+      <created>1571110462433</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1571110462433</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,6 +147,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add idea to ignore files" />
+    <option name="LAST_COMMIT_MESSAGE" value="add idea to ignore files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
