@@ -1,4 +1,4 @@
-#NeuPy
+#PyNeat
 ###Python implementation for NEAT algorithm
 
 ##Technologies used:
