@@ -1,6 +1,7 @@
 import math
 from NEAT.NodeGene import NodeGeneType
-from collections import OrderedDict
+
+
 def sigmoid(x, treshold):
     return math.exp(x) / (math.exp(x)+1)
 
@@ -127,6 +128,7 @@ class Node(object):
 
     def __lt__(self, other):
         return self.marker < other.marker
+
 
 class Connection(object):
     """
