@@ -23,5 +23,11 @@
         <br>->C2
         <br>->C3
 
+#How to use?
+- `git clone https://github.com/santiagobassani96/PyNeat.git`
+- `cd PyNeat`
+- ``
+
 ## TODO:
 - this project needs to be optimized, packaged, distributed and used in further projects.
+- this repo was ment to be the base for a python package which i'll distribute.

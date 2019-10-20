@@ -3,6 +3,7 @@ from NEAT.Genome import Genome
 from NEAT.NodeGene import NodeGeneType, NodeGene
 from NEAT.ConnectionGene import ConnectionGene
 from NEAT.Specie import Specie
+from NEAT.NeuralNet import NeuralNet
 import numpy as np
 from math import inf
 from random import Random
@@ -42,6 +43,7 @@ def evolution(input_set, output_set, epochs=1000):
             specie = species_map[genome]
             # mayyyyybe this is wrong
             score = evaluate(genome, input_set, output_set)
+            print('score {}'.format(score))
             adjusted_score = score / len(specie.members)
             specie.add_adjusted_fitness(adjusted_score)
             specie.set_fitness(genome, adjusted_score)
@@ -119,7 +121,7 @@ def creat_genesis(inputs, outputs, size=10):
 
 def evaluate(genome, input_set, output_set):
     phenotype = generate_phenotype(genome)
-    gene_fitness = get_fitness(phenotype, input_set, output_set)
+    gene_fitness = get_fitness_mse(phenotype, input_set, output_set)
     return gene_fitness
 
 
@@ -168,12 +170,12 @@ def select_genome_roulette(specie):
 
 def generate_phenotype(gene):
 
-    return gene
+    return NeuralNet(gene)
 
 
 def get_fitness(phenotype, input_set, output_set):
     """ for testing purposes we try to make topolgies gain 100 neurons"""
-    return len(phenotype.nodes)
+    return len(phenotype.predict(input_set))
 
 
 def get_fitness_mse(phenotype, input_set, output_set):
@@ -185,14 +187,17 @@ def get_fitness_mse(phenotype, input_set, output_set):
     :return: a float representing the inverse of MSE
     """
     predictions = phenotype.predict(input_set)
-    error = np.abs(output_set - predictions) ** 2
+    error = (output_set - predictions) ** 2
     error = np.sum(error) / len(output_set)
     return 1 / error if error != 0 else inf
 
 
 if __name__ == '__main__':
-    input_set = np.zeros([1, 2])
-    output_set = np.zeros([1, 1])
-    generation = evolution(input_set, output_set, 400)
+    input_set = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
+    output_set = np.array([[0], [1], [1], [1]])
+    generation = evolution(input_set, output_set, 200)
     for gene in generation:
-        print(len(gene.nodes))
+        phenotype = NeuralNet(gene)
+        print(phenotype.predict(input_set))
+        print(len(gene.connections))
+        print('--------')

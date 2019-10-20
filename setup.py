@@ -3,7 +3,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="npyneat-pkg-levensworth",
+    name="pyneat",
     version="0.0.1",
     author="Levensworth",
     author_email="bpstudio96@mail.com",

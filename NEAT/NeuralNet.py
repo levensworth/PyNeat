@@ -1,9 +1,12 @@
 import math
 from NEAT.NodeGene import NodeGeneType
-
+import numpy as np
 
 def sigmoid(x, treshold):
-    return math.exp(x) / (math.exp(x)+1)
+    try:
+        return math.exp(x) / (math.exp(x)+1)
+    except OverflowError:
+        return float('inf')
 
 
 class NeuralNet(object):
@@ -21,15 +24,15 @@ class NeuralNet(object):
             nodes[node.get_id()] = Node(sigmoid, node.get_type(), node.get_id())
 
         for connection in gene.connections.values():
-            if not connection.enable:
-                break
-            in_node = nodes[connection.get_in_node()]
-            out_node = nodes[connection.get_out_node()]
+            if connection.enable:
 
-            in_node.add_out_node_connection(Connection(in_node, out_node, connection.weight
-                                                       , connection.innovation_number))
-            out_node.add_in_node_connection(Connection(in_node, out_node, connection.weight
-                                                       , connection.innovation_number))
+                in_node = nodes[connection.get_in_node()]
+                out_node = nodes[connection.get_out_node()]
+
+                in_node.add_out_node_connection(Connection(in_node, out_node, connection.weight
+                                                           , connection.innovation_number))
+                out_node.add_in_node_connection(Connection(in_node, out_node, connection.weight
+                                                           , connection.innovation_number))
         # we sort the keys to maintain the order between iterations
         # nodes = sorted(nodes, key=nodes.get)
         return nodes
@@ -37,8 +40,14 @@ class NeuralNet(object):
         # now we sort the list by type and sub sort by innovation number
 
     def predict(self, input_values):
+        result = []
+        for vec in input_values:
+            result.append(self._predict(vec))
+        return np.array(result)
+
+    def _predict(self, input_values):
         """
-        this method will try to redict an out given a numpy array input
+        this method will try to predict an out given a numpy array input
         :param input_values: numpy vector where each row represents a single input
         :return:
         """
@@ -51,12 +60,12 @@ class NeuralNet(object):
                 out_nodes.append(node)
 
         if len(input_values) != len(in_nodes):
-            raise AttributeError('input size is {} and should be {}'.format(input_values.shape[1], len(in_nodes)))
+            raise AttributeError('input size is {} and should be {}'.format(len(input_values), len(in_nodes)))
 
         # set the input vector
-        index = 0
+        col_index = 0
         for node in in_nodes:
-            node.receive_input(input_values[index])
+            node.receive_input(input_values[col_index])
 
         conn_stack = []
         for node in out_nodes:
@@ -79,11 +88,6 @@ class NeuralNet(object):
                 # we visit the connection
                 current_conn.visited = True
                 conn_stack.append(current_conn)
-                if current_conn.in_node.neuron_type == NodeGeneType.INPUT:
-                    # it's an input so we only get the input passed
-                    result = current_conn.in_node.input_val
-                    result = result * current_conn.weight
-                    current_conn.out_node.receive_input(result)
                 # and we append it's children
                 for conn in current_conn.in_node.in_nodes.values():
                     conn_stack.append(conn)
@@ -115,6 +119,8 @@ class Node(object):
         self.visited = False
 
     def process(self):
+        if self.neuron_type == NodeGeneType.INPUT:
+            return self.input_val
         return self.activation(self.input_val, self.threshold)
 
     def add_in_node_connection(self, connection):
