@@ -1,7 +1,8 @@
 class Specie(object):
-    def __init__(self, representative):
+    def __init__(self, representative, fitness):
         self.representative = representative
         self.members = []
+        self.add_member(representative, fitness)
         self.adjusted_fitness = 0
 
     def get_representative(self):

@@ -7,7 +7,7 @@ PROBABILITY_PERTURBING = 0.1
 
 class Genome(object):
     """
-    Linear representation of network connectivity
+    Linear representation of network connectivity.
     it contains the list of nodes and connections between them
     connections: a map of connection genes whose key is their innovation number
     nodes: a map of node gene whose key is their id
@@ -15,7 +15,7 @@ class Genome(object):
     def __init__(self, connections, nodes, innovation_generator):
         self.connections = connections
         self.nodes = nodes
-        self.innvation_generator = innovation_generator
+        self.innovation_generator = innovation_generator
 
     def get_connections(self):
         return self.connections
@@ -66,7 +66,7 @@ class Genome(object):
             node_1 = node_2
             node_2 = aux
 
-        new_connection = ConnectionGene(node_1.get_id(), node_2.get_id(), weight, True, self.innvation_generator.get_innovation())
+        new_connection = ConnectionGene(node_1.get_id(), node_2.get_id(), weight, True, self.innovation_generator.get_innovation())
         self.connections[new_connection.get_innovation_number()] = new_connection
 
     def add_node_mutation(self, rand):
@@ -75,11 +75,11 @@ class Genome(object):
         in_node = self.nodes.get(connection.get_in_node())
         out_node = self.nodes.get(connection.get_out_node())
         connection.disable()
-        new_node = NodeGene(NodeGeneType.HIDDEN, len(self.nodes)+1, self.innvation_generator.get_innovation())
+        new_node = NodeGene(NodeGeneType.HIDDEN, len(self.nodes) + 1, self.innovation_generator.get_innovation())
         in_to_new = ConnectionGene(in_node.get_id(), new_node.get_id(), 1.0, True,
-                                   self.innvation_generator.get_innovation())
+                                   self.innovation_generator.get_innovation())
         new_to_out = ConnectionGene(new_node.get_id(), out_node.get_id(), connection.get_weight(), True,
-                                    self.innvation_generator.get_innovation())
+                                    self.innovation_generator.get_innovation())
         self.nodes[new_node.get_id()] = new_node
         self.connections[in_to_new.get_innovation_number()] = in_to_new
         self.connections[new_to_out.get_innovation_number()] = new_to_out
@@ -124,12 +124,12 @@ class Genome(object):
                 child_gene = connection.__copy__()
                 new_connections[child_gene.get_innovation_number()] = child_gene
 
-        return Genome(new_connections, new_nodes, parent1.innvation_generator)
+        return Genome(new_connections, new_nodes, parent1.innovation_generator)
 
     @classmethod
     def count_disjoint(cls, genome_1, genome_2):
         """
-        By definitino a disjoint node would be that who has an innovation number lower than the max and
+        By definition a disjoint node would be that who has an innovation number lower than the max and
         does not have a counter part in the other genome
         :param  genome_1: a Genome
         :param  genome_2: a Genome
@@ -314,9 +314,10 @@ class Genome(object):
         :return: double representing how similar are genome_1 and genome_2
         """
         N = max(len(genome_1.nodes), len(genome_2.nodes))
-        return c1 * (Genome.count_excess_genes(genome_1, genome_2) / N) +\
-               c2 * (Genome.count_disjoint(genome_1, genome_2) / N) + c3 * \
-               Genome.calculate_weight_difference(genome_1, genome_2)
+        value = c1 * (Genome.count_excess_genes(genome_1, genome_2) / N)
+        value += c2 * (Genome.count_disjoint(genome_1, genome_2) / N)
+        value += c3 * Genome.calculate_weight_difference(genome_1, genome_2)
+        return value
 
     def __str__(self):
         string = 'nodes: \n'
@@ -343,4 +344,4 @@ class Genome(object):
         return connections and nodes
 
     def __hash__(self):
-        return 2 * hash(frozenset(self.nodes.items())) + 3 * hash(frozenset(self.connections.items())) + 7 * hash(self.innvation_generator)
+        return 2 * hash(frozenset(self.nodes.items())) + 3 * hash(frozenset(self.connections.items())) + 7 * hash(self.innovation_generator)

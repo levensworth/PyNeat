@@ -14,7 +14,7 @@ C1 = 1.0
 C2 = 1.0
 C3 = 0.3
 
-DT = 3
+DT = 0.8
 
 MUTATION_RATE = 0.3
 NODE_RATE = 0.1
@@ -30,9 +30,9 @@ def evolution(input_set, output_set, epochs=1000):
     while epoch < epochs:
         print('epoch {}'.format(epoch))
         # place genomes into species
-        species_map = {}
+        # species_map = {}
         score_map = {}
-        species = []
+        # species = []
         species, species_map = classify(generation, species, species_map)
         # remove empty species
         for specie in species:
@@ -48,7 +48,6 @@ def evolution(input_set, output_set, epochs=1000):
             specie.add_adjusted_fitness(adjusted_score)
             specie.set_fitness(genome, adjusted_score)
             score_map[genome] = {'genome': genome, 'fitness': adjusted_score}
-
 
         # put best genomes from each species into next generation
         next_gen = []
@@ -73,7 +72,6 @@ def evolution(input_set, output_set, epochs=1000):
                 child.add_connection_mutation(Random())
 
             next_gen.append(child)
-        score_map = {}
         epoch += 1
         generation = next_gen
 
@@ -121,7 +119,7 @@ def creat_genesis(inputs, outputs, size=10):
 
 def evaluate(genome, input_set, output_set):
     phenotype = generate_phenotype(genome)
-    gene_fitness = get_fitness_mse(phenotype, input_set, output_set)
+    gene_fitness = get_fitness_mse(phenotype, input_set, output_set) #get_fitness_mse(phenotype, input_set, output_set)
     return gene_fitness
 
 
@@ -135,7 +133,7 @@ def classify(generation, species, species_map):
                 found = True
                 break
         if not found:
-            new_specie = Specie(genome)
+            new_specie = Specie(genome, 0)
             species_map[genome] = new_specie
             species.append(new_specie)
 
